@@ -1,5 +1,8 @@
 # UK NSS Grid benchmark
 
+**Important:** Please do not contact the benchmark maintainers directly with any questions.
+All questions on the benchmark must be submitted via the procurement response mechanism.
+
 Grid_Benchmark is the benchmarking package, available at [https://github.com/aportelli/grid-benchmark].
 It is licensed under GPLv2, with a list of
 contributors available at [https://github.com/aportelli/grid-benchmark/graphs/contributors].
@@ -49,30 +52,43 @@ Stable
 
 ## Building the benchmark
 
+**Important:** All results submitted should be based on the following repository commits:
+
+- grid-benchmark repository: [c7457a8](https://github.com/aportelli/grid-benchmark/commit/c7457a85b6a0d9d1578838af11477cb41b1a5764)
+- Grid repository: [6165931](https://github.com/paboyle/Grid/commit/6165931afaa53a9885b6183ff762fc2477f30b51)
+
+Any modifications made to the source code for the baseline build or the optimised build must be 
+shared as part of the offerer submission.
+
 ### Permitted modifications
+
+#### Baseline build
 
 `grid-benchmark` has been written with the intention that no modifications to the source code
 are required. It is also intended to be run without the need for additional CLI parameters beyond
 `--json-out` and those required by Grid, although a full list of CLI options are provided in the
-[grid-benchmark README](https://github.com/aportelli/grid-benchmark/) if required. Below is a list of permitted modifications:
+[grid-benchmark README](https://github.com/aportelli/grid-benchmark/) if required. Below is a list
+of permitted modifications:
 
 - Only modify the source code to resolve unavoidable compilation or runtime errors. The
-  [Grid systems directory](https://github.com/paboyle/Grid/tree/develop/systems) has many examples of configuration and run options known to work on a
-  variety of systems in case of e.g. linking errors or runtime issues.
+  [Grid systems directory](https://github.com/paboyle/Grid/tree/develop/systems) has many examples
+  of configuration and run options known to work on a variety of systems in case of e.g. linking
+  errors or runtime issues.
 - For compilation on systems with only ROCm 7.x and greater available, it is permitted to use
   the workaround described below as a substitute for code modification. Workarounds
   of this nature are permitted if unresolvable compilation errors otherwise occur.
 
-We place fewer restrictions on the dependencies of Grid, all of which are detailed in the [Grid README](https://github.com/paboyle/Grid/).
+We place fewer restrictions on the dependencies of Grid, all of which are detailed in the
+[Grid README](https://github.com/paboyle/Grid/).
 
 - The host-code compiler must support C++17. This limits the choice of host-code compilers to
-reasonably recent versions.
+  reasonably recent versions.
 - For NVIDIA GPUs, CUDA versions 11.x or 12.x are recommended.
 - For AMD GPUs, ROCm version 6.x is recommended since Grid is incompatible with ROCm
   version 7.x without minor code modifications. If only ROCm 7.x is available, we provide
   a workaround below.
 
-#### ROCm 7.x/hipBLAS 3.x workaround
+**ROCm 7.x/hipBLAS 3.x workaround**
 
 Both the current develop branch of Grid and the selected Grid benchmarking commit explicitly use
 the hipBLAS 2.x types hipblasComplex and hipblasDoubleComplex. As of hipBLAS 3.x, which
@@ -90,6 +106,12 @@ to the `CXXFLAGS` argument passed to the `configure` command for Grid. This can 
 using a custom preset for the automatic deployment scripts for Grid and grid-benchmark as
 documented in the [grid-benchmark README](https://github.com/aportelli/grid-benchmark/).
 
+#### Optimised build
+
+Any modifications to the source code are allowed as long as they are able to be provided
+back to the community under the same licence as is used for the software package that is
+being modified.
+
 ### Manual build
 
 Detailed build instructions can be found in the benchmark source code
@@ -97,11 +119,17 @@ repository at:
 
 - [https://github.com/aportelli/grid-benchmark/blob/main/Readme.md]
 
+The benchmark code uses the [pixi](https://pixi.prefix.dev/latest/) package
+manager to manage the build process for the software and its dependencies. 
+
 Example build configurations are provided for:
 
-- Tursa: CUDA 11.4, GCC 9.3.0, OpenMPI 4.1.1, UCX 1.12.0
-- Daint: CUDA 12.4, GCC 14.2, HPE Cray MPICH 8.1.32
-- LUMI: ROCm 6.0.3, AMD clang 17.0.1, HPE Cray MPICH 8.1.23 (custom)
+- [Tursa](https://epcced.github.io/dirac-docs/tursa-user-guide/hardware/): CUDA 11.4, GCC 9.3.0, OpenMPI 4.1.1, UCX 1.12.0
+   + NVIDIA A100 GPU, NVLink, Infiniband interconnect
+- [Daint](https://docs.cscs.ch/clusters/daint/): CUDA 12.4, GCC 14.2, HPE Cray MPICH 8.1.32
+   + NVIDIA GH200 CPU+GPU, NVLink, Slingshot 11 interconnect
+- [LUMI-G](https://docs.lumi-supercomputer.eu/hardware/lumig/): ROCm 6.0.3, AMD clang 17.0.1, HPE Cray MPICH 8.1.23 (custom)
+   + AMD MI250X GPU, Infinity fabric, Slingshot 11 interconnect
 
 ## Running the benchmark
 
@@ -111,8 +139,8 @@ Example build configurations are provided for:
 - **Reference FoM:** The reference FoM is from the Tursa system using 64 GPU (16 nodes) is *8614.535 Gflops/s*.
    + [JSON ("result.json") output from the reference run](https://github.com/aportelli/grid-benchmark/blob/main/results/251124/tursa/benchmark-grid-16.116878/result.json)
 
-The projected FoM submitted must give at least the same performance 
-as the reference value.
+**Important:** For the both the baseline build and the optimised build, the projected FoM submitted 
+must give at least the same performance as the reference value.
 
 To aid in testing, we provide FoM values for varying problem sizes on
 Tursa below. Tursa nodes have 2x AMD 7302/7413 EPYC CPU and 4x NVIDIA A100 GPU. 
@@ -130,7 +158,15 @@ per MPI process.
 | 8 | 32 | 1.2.4.4 | 10650.192 |
 | 16 | 64 | 1.4.4.4 | 8614.535 |
 
+Full output from these reference runs are available at:
+[https://github.com/aportelli/grid-benchmark/tree/main/results/251124/tursa]
+
 ### Benchmark execution
+
+**Important:** For runs reporting results, the only allowed option the the `grid_benchmark`
+code is the `--json-out` option. Options to the underlying Grid code can be varied to find
+the best performance with the only restriction being how the MPI decomposition is specified by
+the `--mpi` option (this restriction is described in detail below). 
 
 The submission scripts should be written to accurately allocate NUMA affinities,
 GPU indices, CPU thread indices, and any necessary environment variables (such
@@ -153,7 +189,7 @@ of the first things that should be tested. CPU thread counts per rank are set se
 
 The runtime performance is affected by the MPI rank distribution. MPI ranks are specified
 with the `--mpi X.Y.Z.T` flag. To be representative of realistic workloads, the following algorithm
-must be used as a guideline for setting the MPI decomposition:
+**must** be used for setting the MPI decomposition:
 
 1. Allocate ranks to T until it reaches 4, e.g. `--mpi 1.1.1.4`.
 2. Allocate ranks to Z until it reaches 4, e.g. `--mpi 1.1.4.4`.
@@ -168,13 +204,29 @@ have example wrapper scripts for how to do this.
 While Grid options can be varied, the benchmarks themselves should be run with no additional
 flags than `--json-out`, which will write the results of the benchmark to a JSON file.
 
+## Correctness Checking
+
+The correctness check for this package ensures that a Conjugate Gradient solve using the Dirac matrix
+matches a known analytic expression. The Conjugate Gradient solver relies on repeated applications
+of the Dirac matrix and will therefore produce solutions in disagreement with the analytic result if
+the Dirac matrix is incorrectly implemented.
+
+The `benchmark_grid` code automatically performs this correctness check. If the check fails, you
+will see a message similar to:
+
+```
+Failed to validate free Wilson propagator:
+||(result - ref)||/||(result + ref)|| >= 1e-8
+```
+
 ## Reporting Results
 
 Note that the benchmark will generate more output data than is
 requested, the offeror needs only to report the benchmark values
 requested. Additional data may be provided if desired.
 
-The offeror should provide copies of:
+For both the baseline build and the optimised build. The offeror should
+provide copies of:
 
 - Details of any modifications made to the Grid or Grid_Benchmark source code
 - The compilation process and configuration settings used for the benchmark results - 
@@ -188,5 +240,5 @@ environment that will be provided on the proposed machine.
 
 ## License
 
-This benchmark description and associated files are released under the
+This benchmark description and any associated files are released under the
 MIT license.
