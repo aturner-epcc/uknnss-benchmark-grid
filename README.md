@@ -11,7 +11,7 @@ The benchmark uses the underpinning Grid C++ 17 library for lattice QCD applicat
 Note: the repository contains two benchmarks: Benchmark_Grid and Benchmark_IO. Only
 Benchmark_Grid is in scope for this procurement.
 
-- Benchmark_Grid: A sparse Dirac matrix performance benchmark which also performs
+- `Benchmark_Grid`: A sparse Dirac matrix performance benchmark which also performs
   independent memory and inter-process communication benchmarks, alongside a correctness
   check.
 
@@ -64,7 +64,7 @@ shared as part of the offerer submission.
 
 #### Baseline build
 
-`grid-benchmark` has been written with the intention that no modifications to the source code
+`Benchmark_Gird` has been written with the intention that no modifications to the source code
 are required. It is also intended to be run without the need for additional CLI parameters beyond
 `--json-out` and those required by Grid, although a full list of CLI options are provided in the
 [grid-benchmark README](https://github.com/aportelli/grid-benchmark/) if required. Below is a list
@@ -124,46 +124,18 @@ manager to manage the build process for the software and its dependencies.
 
 Example build configurations are provided for:
 
-- [Tursa](https://epcced.github.io/dirac-docs/tursa-user-guide/hardware/): CUDA 11.4, GCC 9.3.0, OpenMPI 4.1.1, UCX 1.12.0
+- [Tursa (EPCC, Scotland)](https://epcced.github.io/dirac-docs/tursa-user-guide/hardware/): CUDA 11.4, GCC 9.3.0, OpenMPI 4.1.1, UCX 1.12.0
    + NVIDIA A100 GPU, NVLink, Infiniband interconnect
-- [Daint](https://docs.cscs.ch/clusters/daint/): CUDA 12.4, GCC 14.2, HPE Cray MPICH 8.1.32
+- [Daint (CSCS, Switzerland)](https://docs.cscs.ch/clusters/daint/): CUDA 12.4, GCC 14.2, HPE Cray MPICH 8.1.32
    + NVIDIA GH200 CPU+GPU, NVLink, Slingshot 11 interconnect
-- [LUMI-G](https://docs.lumi-supercomputer.eu/hardware/lumig/): ROCm 6.0.3, AMD clang 17.0.1, HPE Cray MPICH 8.1.23 (custom)
+- [LUMI-G (CSC, Finland)](https://docs.lumi-supercomputer.eu/hardware/lumig/): ROCm 6.0.3, AMD clang 17.0.1, HPE Cray MPICH 8.1.23 (custom)
    + AMD MI250X GPU, Infinity fabric, Slingshot 11 interconnect
 
 ## Running the benchmark
 
-### Required Tests
-
-- **Target configuration:** Grid_Benchmark should be run on a minimum of *128 GPU/GCD*.
-- **Reference FoM:** The reference FoM is from the Tursa system using 64 GPU (16 nodes) is *8614.535 Gflops/s*.
-   + [JSON ("result.json") output from the reference run](https://github.com/aportelli/grid-benchmark/blob/main/results/251124/tursa/benchmark-grid-16.116878/result.json)
-
-**Important:** For the both the baseline build and the optimised build, the projected FoM submitted 
-must give at least the same performance as the reference value.
-
-To aid in testing, we provide FoM values for varying problem sizes on
-Tursa below. Tursa nodes have 2x AMD 7302/7413 EPYC CPU and 4x NVIDIA A100 GPU. 
-More details on the Tursa system hardware can be found at: 
-[https://epcced.github.io/dirac-docs/tursa-user-guide/hardware/]
-
-In all cases, 1 MPI process per GPU was used and 8 CPU OpenMP threads
-per MPI process.
-
-| Tursa nodes | Total GPU | Parallel decomposition | FoM (Comparison Point Gflops/s) |
-|--:|--:|--:|--:|
-| 1 | 4 | 1.1.1.4 | 14465.465 |
-| 2 | 8 | 1.1.2.4 | 12635.159 |
-| 4 | 16 | 1.1.4.4 | 12480.005 |
-| 8 | 32 | 1.2.4.4 | 10650.192 |
-| 16 | 64 | 1.4.4.4 | 8614.535 |
-
-Full output from these reference runs are available at:
-[https://github.com/aportelli/grid-benchmark/tree/main/results/251124/tursa]
-
 ### Benchmark execution
 
-**Important:** For runs reporting results, the only allowed option the the `grid_benchmark`
+**Important:** For runs reporting results, the only allowed option the the `Benchmark_Grid`
 code is the `--json-out` option. Options to the underlying Grid code can be varied to find
 the best performance with the only restriction being how the MPI decomposition is specified by
 the `--mpi` option (this restriction is described in detail below). 
@@ -181,30 +153,72 @@ Grid has many command-line interface flags that control its runtime behaviour. I
 ing the optimal flags, as with the compilation options, is system-dependent and requires
 experimentation. A list of Grid flags is given by passing `--help` to `grid-benchmark`, and a
 full list is provided for both Grid and grid-benchmark in the [grid-benchmark README](https://github.com/aportelli/grid-benchmark/).
-A critical flag is `--accelerator-threads`. This heavily influences the warp/wavefront occupancy by
-multiplying Grid's default numbers of threads per thread block in a GPU kernel launch. Setting
-`--accelerator-threads 8` is generally optimal, but this may vary between hardware and is one
-of the first things that should be tested. CPU thread counts per rank are set separately with the
-`--threads` flag.
 
-The runtime performance is affected by the MPI rank distribution. MPI ranks are specified
-with the `--mpi X.Y.Z.T` flag. To be representative of realistic workloads, the following algorithm
-**must** be used for setting the MPI decomposition:
+Important command line options:
 
-1. Allocate ranks to T until it reaches 4, e.g. `--mpi 1.1.1.4`.
-2. Allocate ranks to Z until it reaches 4, e.g. `--mpi 1.1.4.4`.
-3. Allocate ranks to Y until it reaches 4, e.g. `--mpi 1.4.4.4`.
-4. Allocate ranks to X until it reaches 4, e.g. `--mpi 4.4.4.4`.
-5. If further ranks are required, continue to allocate evenly in powers of 2.
+- A critical `Grid` flag is `--accelerator-threads`. This heavily influences
+  the warp/wavefront occupancy by multiplying Grid's default numbers of threads per
+  thread block in a GPU kernel launch. Setting `--accelerator-threads 8` is generally
+  optimal, but this may vary between hardware and is one of the first things that
+  should be tested. CPU thread counts per rank are set separately with the `--threads`
+  flag.
+
+- The runtime performance is affected by the MPI rank distribution. MPI ranks are specified
+  with the `Grid` option `--mpi X.Y.Z.T` flag. To be representative of realistic
+  workloads, the following algorithm **must** be used for setting the MPI decomposition:
+    1. Allocate ranks to T until it reaches 4, e.g. `--mpi 1.1.1.4`.
+    2. Allocate ranks to Z until it reaches 4, e.g. `--mpi 1.1.4.4`.
+    3. Allocate ranks to Y until it reaches 4, e.g. `--mpi 1.4.4.4`.
+    4. Allocate ranks to X until it reaches 4, e.g. `--mpi 4.4.4.4`.
+    5. If further ranks are required, continue to allocate evenly in powers of 2.
+
+- While `Grid` options can be varied, the `Bnechmark_Grid` software should be run with no
+  additional flags than `--json-out`, which will write the results of the benchmark to a
+  JSON file.
 
 A single GPU should be allocated per MPI rank (or GCD in the case of e.g. MI250X).
 The subdirectories in the [benchmark systems directory](https://github.com/aportelli/grid-benchmark/tree/main/systems)
 have example wrapper scripts for how to do this.
 
-While Grid options can be varied, the benchmarks themselves should be run with no additional
-flags than `--json-out`, which will write the results of the benchmark to a JSON file.
+### Required Tests
 
-## Correctness Checking
+- **Target configuration:** Benchmark_Grid should be run on a minimum of *128 GPU/GCD*.
+- **Reference FoM:** The reference FoM is from the CSCS Daint system using 64 GPU (16 nodes) is `*9389 Gflops/s*.
+   + [JSON ("result.json") output from the reference run](https://github.com/aportelli/grid-benchmark/blob/main/results/251124/daint/benchmark-grid-16.2128747/result.json)
+
+**Important:** For the both the baseline build and the optimised build, the projected FoM submitted 
+must give at least the same performance as the reference value.
+
+### Reference Performance on CSCS Daint
+
+To aid in testing, we provide FoM values for varying problem sizes on
+the [CSCS Daint system](https://docs.cscs.ch/clusters/daint/) below.
+Daint nodes have 4x NVIDIA GH200 per node. 
+
+In all cases, 1 MPI process per GPU was used and 8 CPU OpenMP threads
+per MPI process.
+
+| Daint nodes | Total GPU | `--mpi` option | FoM (Comparison Point Gflops/s) |
+|--:|--:|--:|--:|
+| 4 | 16 | 1.1.4.4 | 19770 |
+| 8 | 32 | 1.2.4.4 | 11198 |
+| 16 | 64 | 1.4.4.4 | 9389* |
+| 32 | 128 | 2.4.4.4 | 7388 |
+| 64 | 256 | 4.4.4.4 | 5862 |
+
+Full output from these reference runs are available at:
+[https://github.com/aportelli/grid-benchmark/tree/main/results/251124/daint]
+
+The reference FoM was determined
+by running the reference problem on 64 Daint GH200 (16 GPU nodes)
+with 1 MPI processes per GPU and 9 OpenMP CPU threads per MPI process.
+and is marked by a *.
+The projected FoM (Comparison Point) for the target problem on the target system
+must not be lower than this value.
+
+## Results
+
+### Correctness and performance 
 
 The correctness check for this package ensures that a Conjugate Gradient solve using the Dirac matrix
 matches a known analytic expression. The Conjugate Gradient solver relies on repeated applications
@@ -219,6 +233,27 @@ Failed to validate free Wilson propagator:
 ||(result - ref)||/||(result + ref)|| >= 1e-8
 ```
 
+The FoM for `Benchmark_Grid` is the comparison point sparse Dirac
+matrix multiplication flop rate. This is the average of the single-precision
+Domain-wall fermion benchmarks for 244 and 324 local volumes, which are
+representative of typical production runs. With `jq`, this can be extracted
+from the result JSONs as:
+
+```
+jq '.flops | .comparison_point_Gflops' path/to/json
+```
+
+or using any other JSON-parser of choice. This is given in units of GFlops/s/node.
+
+To be a valid figure-of-merit, the following conditions must be met:
+
+- `Grid` and `Benchmark_Grid` must be compiled with the commits stated above
+  and must meet any source code modification restrictions stated above
+- MPI ranks must be distributed as described above
+- For the command-line options specific to `Benchmark_Grid`, only `--json-out`
+  may be used (i.e. do not disable any benchmarks)
+- The benchmark must be run on the minimum number of GPU/GCD described above
+
 ## Reporting Results
 
 Note that the benchmark will generate more output data than is
@@ -228,15 +263,12 @@ requested. Additional data may be provided if desired.
 For both the baseline build and the optimised build. The offeror should
 provide copies of:
 
-- Details of any modifications made to the Grid or Grid_Benchmark source code
+- Details of any modifications made to the `Grid` or `Benchmark_Grid` source code
 - The compilation process and configuration settings used for the benchmark results - 
   including compiler versions, dependencies used and their versions
 - The job submission scripts and launch wrapper scripts used (if any)
 - A list of options passed to the benchmark code
 - The JSON results files from running the benchmarks
-
-The benchmark should be compiled and run on the compiler and MPI
-environment that will be provided on the proposed machine.
 
 ## License
 
