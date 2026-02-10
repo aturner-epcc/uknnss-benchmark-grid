@@ -264,8 +264,10 @@ For both the baseline build and the optimised build. The offeror should
 provide copies of:
 
 - Details of any modifications made to the `Grid` or `Benchmark_Grid` source code
+  released under the same licence as the software itself
 - The compilation process and configuration settings used for the benchmark results - 
-  including compiler versions, dependencies used and their versions
+  including makefiles, compiler versions, dependencies used and their versions or
+  Spack environment configuration and lock files if Spack is used
 - The job submission scripts and launch wrapper scripts used (if any)
 - A list of options passed to the benchmark code
 - The JSON results files from running the benchmarks
