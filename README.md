@@ -272,7 +272,7 @@ provide copies of:
   Spack environment configuration and lock files if Spack is used
 - The job submission scripts and launch wrapper scripts used (if any)
 - A list of options passed to the benchmark code
-- The JSON results files from running the benchmarks
+- All output files from running the benchmarks
 
 ## License
 
