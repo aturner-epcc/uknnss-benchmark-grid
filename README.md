@@ -48,7 +48,7 @@ Stable
 
 - Programming languages: C++
 - Parallel models: MPI, OpenMP
-- Accelerator offload models: CUDA, HIP
+- Accelerator offload models: CUDA, HIP, SYCL
 
 ## Building the benchmark
 
@@ -151,8 +151,8 @@ architecture in the [Grid systems directory](https://github.com/paboyle/Grid/tre
 
 #### Command-line arguments
 
-Grid has many command-line interface flags that control its runtime behaviour. Identify-
-ing the optimal flags, as with the compilation options, is system-dependent and requires
+Grid has many command-line interface flags that control its runtime behaviour. Identifying
+the optimal flags, as with the compilation options, is system-dependent and requires
 experimentation. A list of Grid flags is given by passing `--help` to `grid-benchmark`, and a
 full list is provided for both Grid and grid-benchmark in the [grid-benchmark README](https://github.com/aportelli/grid-benchmark/).
 
@@ -197,7 +197,7 @@ To aid in testing, we provide FoM values for varying problem sizes on
 the [CSCS Daint system](https://docs.cscs.ch/clusters/daint/) below.
 Daint nodes have 4x NVIDIA GH200 per node. 
 
-In all cases, 1 MPI process per GPU was used and 8 CPU OpenMP threads
+In all cases, 1 MPI process per GPU was used and 72 CPU OpenMP threads
 per MPI process.
 
 | Daint nodes | Total GPU | `--mpi` option | FoM (Comparison Point Gflops/s) |
@@ -213,7 +213,7 @@ Full output from these reference runs are available at:
 
 The reference FoM was determined
 by running the reference problem on 64 Daint GH200 (16 GPU nodes)
-with 1 MPI processes per GPU and 9 OpenMP CPU threads per MPI process.
+with 1 MPI process per GPU and 72 OpenMP CPU threads per MPI process.
 and is marked by a *.
 The projected FoM (Comparison Point) for the target problem on the target system
 must not be lower than this value.
@@ -237,7 +237,7 @@ Failed to validate free Wilson propagator:
 
 The FoM for `Benchmark_Grid` is the comparison point sparse Dirac
 matrix multiplication flop rate. This is the average of the single-precision
-Domain-wall fermion benchmarks for 244 and 324 local volumes, which are
+Domain-wall fermion benchmarks for 24^4 and 32^4 local volumes, which are
 representative of typical production runs. With `jq`, this can be extracted
 from the result JSONs as:
 
