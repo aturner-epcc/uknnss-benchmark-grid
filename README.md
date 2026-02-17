@@ -1,7 +1,5 @@
 # UK NSS Grid benchmark
 
-**Important:** Please do not contact the benchmark maintainers directly with any questions.
-All questions on the benchmark must be submitted via the procurement response mechanism.
 
 Grid_Benchmark is the benchmarking package, available at [https://github.com/aportelli/grid-benchmark].
 It is licensed under GPLv2, with a list of
@@ -31,6 +29,9 @@ Stable
 
 - Antonin Portelli
 - Ryan Hill
+
+**Important:** Please do not contact the benchmark maintainers directly with any questions.
+All questions on the benchmark must be submitted via the procurement response mechanism.
 
 ## Overview
 
