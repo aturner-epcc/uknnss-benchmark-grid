@@ -231,6 +231,24 @@ jq '.flops | .comparison_point_Gflops' path/to/json
 
 or using any other JSON-parser of choice. This is given in units of GFlops/s/node.
 
+### Required data
+
+Data for the following table have to be provided.
+For each and every run, the result data have to be correct (mandatory requirement). 
+Performance data feed into a weighted total average.
+
+| Command line options | Nodes/GPUs | Baseline FoM | Optimised code FoM | Comments | Min performance baseline |
+|--:|--:|--:|--:|:--|:--|
+| ``--mpi 1.1.1.1 --max-L 48`` | 1/1 | | | Single GPU throughput | xxx |
+| ``--mpi 1.1.1.4 --max-L 48`` | 1/4 | | | Assuming a n=4 four GPU per node configuration. Otherwise, provide 1.1.1.n data. | xxx |
+| ``--mpi 1.2.4.4 --max-L 48`` | 8/32 | | | Assuming a n=4 four GPU per node configuration. Otherwise, provide 1.1.1.n data. | xxx |
+| ``--mpi 1.4.4.4 --max-L 48`` | 16/64 | | | Assuming a n=4 four GPU per node configuration. Otherwise, provide 1.1.1.n data. | xxx |
+| ``--mpi 2.4.4.4 --max-L 48`` | 32/128 | | | Assuming a n=4 four GPU per node configuration. Otherwise, provide 1.1.1.n data. | xxx |
+| ``--mpi 4.4.4.4 --max-L 48`` | 64/256 | | | Assuming a n=4 four GPU per node configuration. Otherwise, provide 1.1.1.n data. | xxx |
+| ``--mpi ... --max-L 48`` | | | | If island/subpartition with higher bandwidth is provided, pick configuration fitting to this island. | |
+| ``--mpi ... --max-L 48`` | | | | Whole system run | |
+
+
 <!--
 To be a valid figure-of-merit, the following conditions must be met:
 
@@ -240,6 +258,17 @@ To be a valid figure-of-merit, the following conditions must be met:
 - For the command-line options specific to `Benchmark_Grid`, only `--json-out`
   may be used (i.e. do not disable any benchmarks)
 - The benchmark must be run on the minimum number of GPU/GCD described above
+
+
+
+| Daint nodes | Total GPU | `--mpi` option | FoM (Comparison Point Gflops/s) |
+|--:|--:|--:|--:|
+| 4 | 16 | 1.1.4.4 | 19770 |
+| 8 | 32 | 1.2.4.4 | 11198 |
+| 16 | 64 | 1.4.4.4 | 9389* |
+| 32 | 128 | 2.4.4.4 | 7388 |
+| 64 | 256 | 4.4.4.4 | 5862 |
+
 
 ## Reporting Results
 
