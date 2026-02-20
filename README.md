@@ -81,8 +81,7 @@ of permitted modifications:
 - For compilation on systems with only ROCm 7.x and greater available, it is permitted to use
   the workaround described below as a substitute for code modification. Workarounds
   of this nature are permitted if unresolvable compilation errors otherwise occur.
-- For NVIDIA GPUs, CUDA versions 11.x or 12.x are recommended.
-- Teams recently reported that some code parts which are not used by the benchmarking as they cover edge cases do not compile on Grace Hopper platforms. Such code in the baseline build can be removed (subject to documentation). 
+- For NVIDIA GPUs, CUDA versions 11.x or 12.x are recommended. Teams recently reported that some code parts struggle with CUDA 13. Such code parts can be removed (subject to documentation) as long as they do not affect the benchmark outcome. 
 - For AMD GPUs, ROCm version 6.x is recommended since Grid is incompatible with ROCm
   version 7.x without minor code modifications. If only ROCm 7.x is available, we provide
   a workaround below.
