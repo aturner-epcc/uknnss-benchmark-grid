@@ -17,6 +17,7 @@ Dirac matrix benchmark is ran for five problem sizes, each of which assigns a 4D
 rank, referred to as the local lattice size or local volume. These are 8^4, 12^4, 16^4, 24^4, and
 32^4. -->
 The sparse Dirac matrix benchmark assigns a 4D array to each MPI rank/GPU, referred to as the local lattice size or local volume.
+It is ran for different problem sizes (e.g. 8^4, 12^4, 16^4, 24^4, ...) and reports an average single precision performance for the two biggest runs.
 Since the local volumes are fixed, increasing the number of MPI ranks corresponds to a
 weak scaling of the benchmark.
 
