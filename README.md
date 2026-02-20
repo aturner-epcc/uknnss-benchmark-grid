@@ -104,7 +104,7 @@ documented in the [grid-benchmark README](https://github.com/aportelli/grid-benc
 Any modifications to the source code are allowed as long as they are able to be provided
 back to the community under the same licence as is used for the software package that is
 being modified.
-Any submitted benchmark must enlist a publicly visible pull/merge request issued by the benchmarking team that contains all changes, 
+Any submitted benchmark must clearly point to a publicly visible pull/merge request issued by the benchmarking team that contains all changes, 
 i.e. the same (altered) code base as to be used for all benchmark runs.
 As a consequence, the benchmarking team is encouraged to start benchmarking using the latest software version.
 The assessment team furthermore appreciates a description of any changes implemented by the benchmarking team.
@@ -214,7 +214,7 @@ Failed to validate free Wilson propagator:
 
 The figure of merit (FoM) for `Benchmark_Grid` is the comparison point sparse Dirac
 matrix multiplication flop rate. This is the average of the single-precision
-Domain-wall fermion benchmarks for 24^4 and 48^4 local volumes, which are
+Domain-wall fermion benchmarks for different local volumes, which are
 representative of typical production runs. With `jq`, this can be extracted
 from the result JSONs as:
 
@@ -284,7 +284,7 @@ provide copies of:
 
 ## Reference data
 
-The tables below enlist reference data from existing machines. 
+The tables below list reference data from existing systems. 
 Please note that these machines have a weaker interconnect (typically 200 GB/s) and use a characteristic local lattice size of 36^4.
 All data results from the baseline code without any manual tuning.
 
