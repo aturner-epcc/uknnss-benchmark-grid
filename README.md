@@ -1,4 +1,4 @@
-e# UK NSS Grid benchmark
+# UK NSS Grid benchmark
 
 
 Grid_Benchmark is the benchmarking package, available at [https://github.com/aportelli/grid-benchmark].
