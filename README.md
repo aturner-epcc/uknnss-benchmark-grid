@@ -1,4 +1,4 @@
-# UK NSS Grid benchmark
+# UK NNSS Grid benchmark
 
 
 Grid_Benchmark is the benchmarking package, available at [https://github.com/aportelli/grid-benchmark].
@@ -174,20 +174,13 @@ or using any other JSON-parser of choice. This is given in units of GFlops/s/nod
 
 ### Required data
 
-- **Target configuration:** Benchmark_Grid should be run on a minimum of *128 GPU/GCD*.
-- **Reference FoM:** The reference FoM is from the CSCS Daint system using 64 GPU (16 nodes) is *9389 Gflops/s*.
-   + [JSON ("result.json") output from the reference run](https://github.com/aportelli/grid-benchmark/blob/main/results/251124/daint/benchmark-grid-16.2128747/result.json)
-
-**Important:** For the both the baseline build and the optimised build, the projected FoM submitted 
-must give at least the same performance as the reference value.
-
-In addition, data for the following table have to be provided.
+Data for the following table have to be provided.
 
 | Command line options | Nodes/GPUs | Baseline FoM | Optimised code FoM | Comments |
 |--:|--:|--:|--:|:--|
 | ``--mpi 1.1.1.1`` | 1/1 | | | Single GPU throughput |
-| ``--mpi 1.1.1.4`` | 1/4 | | | Assuming a n=4 four GPU per node configuration. Otherwise, provide 1.1.1.n data. |
-| ``--mpi 1.2.4.4`` | 8/32 | | | Assuming a n=4 four GPU per node configuration. Otherwise, provide 1.2.4.n data. |
+| ``--mpi 1.1.1.4`` | 1/4 | | | Assuming a n=4 four GPU per node configuration. Adjust for more GPU per node, e.g. 8 GPU per node would be `--mpi 1.1.2.4`. |
+| ``--mpi 1.2.4.4`` | 8/32 | | | Assuming a n=4 four GPU per node configuration.  |
 | ``--mpi 1.4.4.4`` | 16/64 | | | Assuming a n=4 four GPU per node configuration. Otherwise, provide 1.4.4.n data. |
 | ``--mpi 2.4.4.4`` | 32/128 | | | Assuming a n=4 four GPU per node configuration. Otherwise, provide 1.4.4.n data. |
 | ``--mpi 4.4.4.4`` | 64/256 | | | Assuming a n=4 four GPU per node configuration. Otherwise, provide 4.4.4.n data. |
@@ -200,19 +193,24 @@ as the table above.
 ### Example performance data
 
 To aid in testing, we provide FoM values for varying problem sizes on
-the [CSCS Daint system](https://docs.cscs.ch/clusters/daint/) below.
-Daint nodes have 4x NVIDIA GH200 per node. 
+the [CSCS Daint system](https://docs.cscs.ch/clusters/daint/) and
+the [IsambardAI system](https://docs.isambard.ac.uk/specs/#system-specifications-isambard-ai-phase-2).
+Both Daint nodes and IsambardAI have 4x NVIDIA GH200 per node and
+4x 200 Gbps Slingshot 11 interfaces per node. 
 
 In all cases, 1 MPI process per GPU was used and 72 CPU OpenMP threads
 per MPI process.
 
-| Daint nodes | Total GPU | `--mpi` option | FoM (Comparison Point Gflops/s) |
-|--:|--:|--:|--:|
-| 4 | 16 | 1.1.4.4 | 19770 |
-| 8 | 32 | 1.2.4.4 | 11198 |
-| 16 | 64 | 1.4.4.4 | 9389* |
-| 32 | 128 | 2.4.4.4 | 7388 |
-| 64 | 256 | 4.4.4.4 | 5862 |
+| Nodes | Total GPU | `--mpi` option | Daint FoM (Comparison Point Gflops/s) | IsambardAI FoM (Comparison Point Gflops/s) |
+|--:|--:|--:|--:|--:|
+| 4 | 16 | 1.1.4.4 | 19770 | 20201 |
+| 8 | 32 | 1.2.4.4 | 11198 | 9066 |
+| 16 | 64 | 1.4.4.4 | 9389 | 8739* |
+| 32 | 128 | 2.4.4.4 | 7388 | 7766 |
+| 64 | 256 | 4.4.4.4 | 5862 | 6413 |
+| 128 | 512 | 4.4.4.8 | | 6040 |
+| 256 | 1024 | 4.4.8.8 | | 5271 |
+| 512 | 2048 | 4.8.8.8 | | 4504 |
 
 ## Reporting Results
 
