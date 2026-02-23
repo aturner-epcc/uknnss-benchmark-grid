@@ -175,7 +175,7 @@ or using any other JSON-parser of choice. This is given in units of GFlops/s/nod
 ### Required data
 
 - **Target configuration:** Benchmark_Grid should be run on a minimum of *128 GPU/GCD*.
-- **Reference FoM:** The reference FoM is from the CSCS Daint system using 64 GPU (16 nodes) is `*9389 Gflops/s*.
+- **Reference FoM:** The reference FoM is from the CSCS Daint system using 64 GPU (16 nodes) is *9389 Gflops/s*.
    + [JSON ("result.json") output from the reference run](https://github.com/aportelli/grid-benchmark/blob/main/results/251124/daint/benchmark-grid-16.2128747/result.json)
 
 **Important:** For the both the baseline build and the optimised build, the projected FoM submitted 
