@@ -288,46 +288,7 @@ provide copies of:
   Spack environment configuration and lock files if Spack is used
 - The job submission scripts and launch wrapper scripts used (if any)
 - A list of options passed to the benchmark code
-- The JSON results files from running the benchmarks
--->
-
-## Reference data
-
-The tables below list reference data from existing systems. 
-Please note that these machines have a weaker interconnect (typically 200 GB/s) and use a characteristic local lattice size of 32^4.
-All data results from the baseline code without any manual tuning.
-
-### CSCS Daint
-
-To aid in testing, we provide FoM values for varying problem sizes on
-the [CSCS Daint system](https://docs.cscs.ch/clusters/daint/) below.
-Daint nodes have 4x NVIDIA GH200 per node. 
-
-In all cases, 1 MPI process per GPU was used and 72 CPU OpenMP threads
-per MPI process.
-
-| Daint nodes | Total GPU | `--mpi` option | FoM (Comparison Point Gflops/s) |
-|--:|--:|--:|--:|
-| 4 | 16 | 1.1.4.4 | 19770 |
-| 8 | 32 | 1.2.4.4 | 11198 |
-| 16 | 64 | 1.4.4.4 | 9389* |
-| 32 | 128 | 2.4.4.4 | 7388 |
-| 64 | 256 | 4.4.4.4 | 5862 |
-
-Full output from these reference runs are available at:
-[https://github.com/aportelli/grid-benchmark/tree/main/results/251124/daint]
-
-The reference FoM was determined
-by running the reference problem on 64 Daint GH200 (16 GPU nodes)
-with 1 MPI process per GPU and 72 OpenMP CPU threads per MPI process.
-and is marked by a *.
-
-<!--
-The projected FoM (Comparison Point) for the target problem on the target system
-must not be lower than this value.
--->
-
-
+- All output files from running the benchmarks
 
 ## License
 
