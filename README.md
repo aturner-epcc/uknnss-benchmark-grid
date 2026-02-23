@@ -184,7 +184,7 @@ must give at least the same performance as the reference value.
 In addition, data for the following table have to be provided.
 
 | Command line options | Nodes/GPUs | Baseline FoM | Optimised code FoM | Comments |
-|--:|--:|--:|--:|:--|:--|
+|--:|--:|--:|--:|:--|
 | ``--mpi 1.1.1.1`` | 1/1 | | | Single GPU throughput |
 | ``--mpi 1.1.1.4`` | 1/4 | | | Assuming a n=4 four GPU per node configuration. Otherwise, provide 1.1.1.n data. |
 | ``--mpi 1.2.4.4`` | 8/32 | | | Assuming a n=4 four GPU per node configuration. Otherwise, provide 1.2.4.n data. |
