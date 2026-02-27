@@ -64,10 +64,27 @@ of permitted modifications:
 - For compilation on systems with only ROCm 7.x and greater available, it is permitted to use
   the workaround described below as a substitute for code modification. Workarounds
   of this nature are permitted if unresolvable compilation errors otherwise occur.
-- For NVIDIA GPUs, CUDA versions 11.x or 12.x are recommended. Teams recently reported that some code parts struggle with CUDA 13. Such code parts can be removed (subject to documentation) as long as they do not affect the benchmark outcome. 
+- For NVIDIA GPUs, CUDA versions 11.x or 12.x are recommended. If only CUDA 13 or more recent
+  is available, we provide a workaround below.
 - For AMD GPUs, ROCm version 6.x is recommended since Grid is incompatible with ROCm
   version 7.x without minor code modifications. If only ROCm 7.x is available, we provide
   a workaround below.
+
+**CUDA 13+ workaround**
+
+Create a new header file with the following contents:
+ 
+```c++
+#pragma once
+#include <cuda/std/functional>
+namespace cub
+{
+    using Sum = cuda::std::plus<>;
+}
+```
+ 
+Add `-include /path/to/header/file` in the `CXXFLAGS` definition for the system in
+`grid-config.json`.
 
 **ROCm 7.x/hipBLAS 3.x workaround**
 
