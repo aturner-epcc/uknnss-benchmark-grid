@@ -126,6 +126,22 @@ All details to be reported are to be taken from this output file.
 
 ### Benchmark execution
 
+The following conditions on options and runtime configuration must be adhered to for both 
+the baseline and optiised build:
+
+- The runtime performance is affected by the MPI rank distribution. MPI ranks are specified
+  with the `Grid` option `--mpi X.Y.Z.T` flag. To be representative of realistic
+  workloads, the following algorithm **must** be used for setting the MPI decomposition:
+    1. Allocate ranks to T until it reaches 4, e.g. `--mpi 1.1.1.4`.
+    2. Allocate ranks to Z until it reaches 4, e.g. `--mpi 1.1.4.4`.
+    3. Allocate ranks to Y until it reaches 4, e.g. `--mpi 1.4.4.4`.
+    4. Allocate ranks to X until it reaches 4, e.g. `--mpi 4.4.4.4`.
+    5. If further ranks are required, continue to allocate evenly in powers of 2.
+- While `Grid` options can be varied, the `Bnechmark_Grid` software should be run with no
+  additional flags than `--json-out`, which will write the results of the benchmark to a
+  JSON file.
+- A single GPU should be allocated per MPI rank (or GCD in the case of e.g. MI250X).
+
 Besides the mandatory flags, Grid has many command-line interface flags that control its
 runtime behaviour. Identifying the optimal flags, as with the compilation options, is
 system-dependent and requires experimentation. A list of Grid flags is given by passing
