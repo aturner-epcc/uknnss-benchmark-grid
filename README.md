@@ -143,6 +143,22 @@ All details to be reported are to be taken from this output file.
 
 ### Benchmark execution
 
+The following conditions on options and runtime configuration must be adhered to for both 
+the baseline and optiised build:
+
+- The runtime performance is affected by the MPI rank distribution. MPI ranks are specified
+  with the `Grid` option `--mpi X.Y.Z.T` flag. To be representative of realistic
+  workloads, the following algorithm **must** be used for setting the MPI decomposition:
+    1. Allocate ranks to T until it reaches 4, e.g. `--mpi 1.1.1.4`.
+    2. Allocate ranks to Z until it reaches 4, e.g. `--mpi 1.1.4.4`.
+    3. Allocate ranks to Y until it reaches 4, e.g. `--mpi 1.4.4.4`.
+    4. Allocate ranks to X until it reaches 4, e.g. `--mpi 4.4.4.4`.
+    5. If further ranks are required, continue to allocate evenly in powers of 2.
+- While `Grid` options can be varied, the `Bnechmark_Grid` software should be run with no
+  additional flags than `--json-out`, which will write the results of the benchmark to a
+  JSON file.
+- A single GPU should be allocated per MPI rank (or GCD in the case of e.g. MI250X).
+
 Besides the mandatory flags, Grid has many command-line interface flags that control its
 runtime behaviour. Identifying the optimal flags, as with the compilation options, is
 system-dependent and requires experimentation. A list of Grid flags is given by passing
@@ -191,16 +207,20 @@ or using any other JSON-parser of choice. This is given in units of GFlops/s/nod
 
 ### Required data
 
+- **Reference FoM:** The reference FoM is from the IsambardAI system using 128 GPU (32 nodes): *7766 Gflops/s per node*.
+- **Target configuration:** The Grid performance must meet the same performance as the reference FoM on a minimum of 256 GPU/GCD.
+
+
 Data for the following table have to be provided.
 
 | Command line options | Nodes/GPUs | Baseline FoM | Optimised code FoM | Comments |
 |--:|--:|--:|--:|:--|
 | ``--mpi 1.1.1.1`` | 1/1 | | | Single GPU throughput |
 | ``--mpi 1.1.1.4`` | 1/4 | | | Assuming a n=4 four GPU per node configuration. Adjust for more GPU per node, e.g. 8 GPU per node would be `--mpi 1.1.2.4`. |
-| ``--mpi 1.2.4.4`` | 8/32 | | | Assuming a n=4 four GPU per node configuration.  |
-| ``--mpi 1.4.4.4`` | 16/64 | | | Assuming a n=4 four GPU per node configuration. Otherwise, provide 1.4.4.n data. |
-| ``--mpi 2.4.4.4`` | 32/128 | | | Assuming a n=4 four GPU per node configuration. Otherwise, provide 1.4.4.n data. |
-| ``--mpi 4.4.4.4`` | 64/256 | | | Assuming a n=4 four GPU per node configuration. Otherwise, provide 4.4.4.n data. |
+| ``--mpi 1.2.4.4`` | 8/32 | | | Assuming a n=4 four GPU per node configuration. Adjust for more GPU per node. |
+| ``--mpi 1.4.4.4`` | 16/64 | | | Assuming a n=4 four GPU per node configuration. Adjust for more GPU per node. |
+| ``--mpi 2.4.4.4`` | 32/128 | | | Assuming a n=4 four GPU per node configuration. Adjust for more GPU per node.  |
+| ``--mpi 4.4.4.4`` | 64/256 | | | Assuming a n=4 four GPU per node configuration. Adjust for more GPU per node.  |
 | ``--mpi ...`` | | | | Whole system run |
 
 Optionally, if an island/subpartition with higher bandwidth is provided, then the benchmark should
@@ -218,12 +238,12 @@ Both Daint nodes and IsambardAI have 4x NVIDIA GH200 per node and
 In all cases, 1 MPI process per GPU was used and 72 CPU OpenMP threads
 per MPI process.
 
-| Nodes | Total GPU | `--mpi` option | Daint FoM (Comparison Point Gflops/s) | IsambardAI FoM (Comparison Point Gflops/s) |
+| Nodes | Total GPU | `--mpi` option | Daint FoM (Comparison Point Gflops/s per node) | IsambardAI FoM (Comparison Point Gflops/s per node) |
 |--:|--:|--:|--:|--:|
 | 4 | 16 | 1.1.4.4 | 19770 | 20201 |
 | 8 | 32 | 1.2.4.4 | 11198 | 9066 |
-| 16 | 64 | 1.4.4.4 | 9389 | 8739* |
-| 32 | 128 | 2.4.4.4 | 7388 | 7766 |
+| 16 | 64 | 1.4.4.4 | 9389 | 8739 |
+| 32 | 128 | 2.4.4.4 | 7388 | 7766* |
 | 64 | 256 | 4.4.4.4 | 5862 | 6413 |
 | 128 | 512 | 4.4.4.8 | | 6040 |
 | 256 | 1024 | 4.4.8.8 | | 5271 |
