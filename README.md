@@ -27,9 +27,7 @@ Stable
 **Important:** Please do not contact the benchmark maintainers directly with any questions.
 All questions on the benchmark must be submitted via the procurement response mechanism.
 
-## Overview
-
-### Software
+## Software
 
 [https://github.com/aportelli/grid-benchmark](https://github.com/aportelli/grid-benchmark)
 
