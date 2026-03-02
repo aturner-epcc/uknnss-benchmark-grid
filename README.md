@@ -174,6 +174,8 @@ There are example job submission scripts and launch wrapper scripts in the
 There are also run scripts for specific systems that may be closer to the target
 architecture in the [Grid systems directory](https://github.com/paboyle/Grid/tree/develop/systems).
 
+## Results
+
 ### Correctness results 
 
 The correctness check for this package ensures that a Conjugate Gradient solve using the Dirac matrix
